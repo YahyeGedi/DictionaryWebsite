@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+
+        header {
+            background-color: #333;
+            color: white;
+            padding: 10px;
+            text-align: right;
+        }
+
+        .user-info {
+            margin-right: 20px;
+        }
+
+        .user-info p {
+            margin: 0;
+        }
+
+        .user-info span {
+            font-weight: bold;
+        }
+
+        main {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 100%; /* Full width */
+            height: 100%; /* Full height */
+            text-align: center;
+        }
+
+        h1, h2 {
+            color: #333;
+        }
+
+        .word-search {
+            margin-top: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        label {
+            margin-bottom: 10px;
+        }
+
+        input {
+            width: 200px;
+            padding: 8px;
+            box-sizing: border-box;
+            margin-bottom: 10px;
+        }
+
+        .search-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+
+        button {
+            background-color: #4caf50;
+            color: white;
+            padding: 10px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 0 5px;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+        .word-display {
+            margin-top: 20px;
+            font-size: 1.2em;
+        }
+        
+    </style>
+</head>
+<body>
+    <main>
+        <h1>Home</h1>
+        <h2>Hello, {{naming}}</h2>
+
+         {{#if isAdmin}}
+            <div class="admin-button">
+                <a href="/users">View All Users</a>
+            </div>
+        {{/if}}
+
+        <div class="word-search">
+
+        <div class="word-search">
+            <div class="search-container">
+                <label for="wordSearch">Word Search: </label>
+                <input type="text" id="wordSearch" name="wordSearch" placeholder="Enter a word...">
+                <button id="searchButton">Search</button>
+            </div>
+            <div>
+                <button id="randomButton">Random Word</button>
+                <button id="wordOfDayButton">Word of the Day</button>
+            </div>
+            <div class="word-display" id="wordDisplay"></div>
+    
+        </div>
+    </main>
+    <script>
+    const apiKey = 'f19t7bxksz6iy0kfbbkerrmczfnv4r3davqplbn33ysrl7ses';
+
+    document.getElementById('searchButton').addEventListener('click', function() {
+        const wordToSearch = document.getElementById('wordSearch').value;
+
+        // Make a request to the Wordnik API for the word definition
+        fetch(`https://api.wordnik.com/v4/word.json/${wordToSearch}/definitions?api_key=${apiKey}`)
+            .then(response => response.json())
+            .then(data => {
+                if (data.length > 0) {
+                    const definition = data[0].text;
+                    document.getElementById('wordDisplay').innerText = `Definition: ${definition}`;
+                } else {
+                    document.getElementById('wordDisplay').innerText = 'Word not found.';
+                }
+            })
+            .catch(error => {
+                console.error('Error fetching word definition:', error);
+                document.getElementById('wordDisplay').innerText = 'Error fetching word definition.';
+            });
+    });
+
+ 
+    document.getElementById('randomButton').addEventListener('click', function() {
+
+        alert('Random button clicked!');
+    });
+
+ 
+    document.getElementById('wordOfDayButton').addEventListener('click', function() {
+        
+        alert('Word of the day button clicked!');
+    });
+</script>
+</body>
+</html>
