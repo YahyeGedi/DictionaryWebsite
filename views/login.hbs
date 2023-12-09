@@ -8,7 +8,7 @@
     <style>
         body {
             font-family: 'Arial', sans-serif;
-            background-color: #f4f4f4;
+            background-color: #344a72;
             margin: 0;
             padding: 0;
             display: flex;
@@ -20,25 +20,16 @@
         form {
             background-color: #fff;
             padding: 20px;
-            border-radius: 8px;
+            border-radius:3px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            width: 300px;
+            width: 360px;
+            height:400px;
+            margin:auto;
             text-align: center;
         }
 
-        h1 {
-            color: #333;
-        }
-
-        input {
-            width: 100%;
-            padding: 10px;
-            margin: 8px 0;
-            box-sizing: border-box;
-        }
-
-        .sub {
-            background-color: #4caf50;
+        .submit {
+            background-color: #49c1a2;
             color: white;
             padding: 10px;
             border: none;
@@ -49,8 +40,22 @@
             margin-top: 10px;
         }
 
-        .sub:hover {
-            background-color: #45a049;
+        input {
+            width: 100%;
+            padding: 10px;
+            margin: 8px 0;
+            box-sizing: border-box;
+        }
+
+         a {
+            color: #0744b4;
+            text-decoration: none;
+            display: block;
+            margin-top: 10px;
+        }
+
+        a:hover {
+            color: #0b00a5;
         }
 
         h3 {
@@ -58,16 +63,18 @@
             margin-top: 15px;
         }
 
-        a {
-            color: #4caf50;
-            text-decoration: none;
-            display: block;
-            margin-top: 10px;
+         h1 {
+            color: #333;
+            text-align: center;
+            padding-top: 25px;  
         }
 
-        a:hover {
-            color: #45a049;
+
+        .submit:hover {
+            background-color: #5a7962;
         }
+
+       
     </style>
 </head>
 <body>
@@ -76,7 +83,7 @@
         <h1>Login Form</h1>
         <input placeholder="Name" name="name" type="text">
         <input placeholder="Password" name="password" type="password">
-        <input class="sub" type="submit" value="Login">
+        <input class="submit" type="submit" value="Login">
         <h3>Don't have an account?</h3>
         <a href="/signup">Create a new account</a>
     </form>

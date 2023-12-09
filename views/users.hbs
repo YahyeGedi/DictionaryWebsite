@@ -49,12 +49,16 @@
     <thead>
       <tr>
         <th>Username</th>
+        <th>Password</th>
+        <th>Admin</th>
       </tr>
     </thead>
     <tbody>
       {{#each users}}
         <tr>
           <td>{{this.name}}</td>
+          <td>{{this.password}}</td>
+          <td>{{#if this.isAdmin}} Yes {{else}} No {{/if}}</td>
         </tr>
       {{/each}}
     </tbody>

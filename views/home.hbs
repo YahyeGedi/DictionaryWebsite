@@ -5,10 +5,11 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Home</title>
+    <link rel="stylesheet" href="/views/homeStyle.css">
     <style>
         body {
             font-family: 'Arial', sans-serif;
-            background-color: #f4f4f4;
+            background-color: #344a72;
             margin: 0;
             padding: 0;
             display: flex;
@@ -17,37 +18,21 @@
             height: 100vh;
         }
 
-        header {
-            background-color: #333;
-            color: white;
-            padding: 10px;
-            text-align: right;
-        }
-
-        .user-info {
-            margin-right: 20px;
-        }
-
-        .user-info p {
-            margin: 0;
-        }
-
-        .user-info span {
-            font-weight: bold;
+        input {
+            width: 200px;
+            padding: 8px;
+            box-sizing: border-box;
+            margin-bottom: 10px;
         }
 
         main {
-            background-color: #fff;
+            background-color: #344a72;
             padding: 20px;
             border-radius: 8px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            width: 100%; /* Full width */
-            height: 100%; /* Full height */
+            width: 100%;
+            height: 100%;
             text-align: center;
-        }
-
-        h1, h2 {
-            color: #333;
         }
 
         .word-search {
@@ -61,14 +46,16 @@
             margin-bottom: 10px;
         }
 
-        input {
-            width: 200px;
-            padding: 8px;
-            box-sizing: border-box;
-            margin-bottom: 10px;
+
+        h1 {
+            color: #000000;
         }
 
-        .search-container {
+        h2 {
+            color: #000000;
+        }
+
+         .search-container {
             display: flex;
             align-items: center;
             justify-content: center;
@@ -76,7 +63,7 @@
         }
 
         button {
-            background-color: #4caf50;
+            background-color: #4a914d;
             color: white;
             padding: 10px;
             border: none;
@@ -85,14 +72,14 @@
             margin: 0 5px;
         }
 
-        button:hover {
-            background-color: #45a049;
+         button:hover {
+            background-color: #2b5e2d;
         }
+
         .word-display {
             margin-top: 20px;
             font-size: 1.2em;
         }
-        
     </style>
 </head>
 <body>
@@ -100,13 +87,11 @@
         <h1>Home</h1>
         <h2>Hello, {{naming}}</h2>
 
-         {{#if isAdmin}}
+        {{#if isAdmin}}
             <div class="admin-button">
                 <a href="/users">View All Users</a>
             </div>
         {{/if}}
-
-        <div class="word-search">
 
         <div class="word-search">
             <div class="search-container">
@@ -119,12 +104,14 @@
                 <button id="wordOfDayButton">Word of the Day</button>
             </div>
             <div class="word-display" id="wordDisplay"></div>
-    
         </div>
     </main>
     <script>
+        // My Wordnik API key
     const apiKey = 'f19t7bxksz6iy0kfbbkerrmczfnv4r3davqplbn33ysrl7ses';
 
+
+    // When the search button is clicked, get the word to search for
     document.getElementById('searchButton').addEventListener('click', function() {
         const wordToSearch = document.getElementById('wordSearch').value;
 
@@ -132,29 +119,87 @@
         fetch(`https://api.wordnik.com/v4/word.json/${wordToSearch}/definitions?api_key=${apiKey}`)
             .then(response => response.json())
             .then(data => {
+                // If the word is found, display the definition
                 if (data.length > 0) {
+                    // Get the words definition and part of speech
                     const definition = data[0].text;
+                    const partOfSpeech = data[0].partOfSpeech;
+                    // Display the word, definition, and part of speech
                     document.getElementById('wordDisplay').innerText = `Definition: ${definition}`;
+                    document.getElementById('wordDisplay').innerText += `\nPart of Speech: ${partOfSpeech}`;
+
                 } else {
+                    // If the word is not found, display an error message
                     document.getElementById('wordDisplay').innerText = 'Word not found.';
                 }
             })
             .catch(error => {
+                // If there is an error, display an error message
                 console.error('Error fetching word definition:', error);
                 document.getElementById('wordDisplay').innerText = 'Error fetching word definition.';
             });
     });
 
- 
+    // When the random word button is clicked, get a random word
     document.getElementById('randomButton').addEventListener('click', function() {
+        // Make a request to the Wordnik API for a random word
+        fetch(`https://api.wordnik.com/v4/words.json/randomWord?api_key=${apiKey}`)
+            .then(response => response.json())
+            .then(data => {
+                // Get the random word
+                const randomWord = data.word;
+                document.getElementById('wordDisplay').innerText = `Random Word: ${randomWord}`;
 
-        alert('Random button clicked!');
+                // After getting the random word, fetch its definition
+                fetch(`https://api.wordnik.com/v4/word.json/${randomWord}/definitions?api_key=${apiKey}`)
+                    .then(response => response.json())
+                    .then(definitionsData => {
+                        if (definitionsData.length > 0) {
+                            // If the word is found, display the definition
+                            const definition = definitionsData[0].text;
+                            const partOfSpeech = definitionsData[0].partOfSpeech;
+
+                            // Display the definition and part of speech
+                            document.getElementById('wordDisplay').innerText += `\nDefinition: ${definition}`;
+                            document.getElementById('wordDisplay').innerText += `\nPart of Speech: ${partOfSpeech}`;
+                        } else {
+                            // If the word is not found, display an error message
+                            document.getElementById('wordDisplay').innerText += '\nDefinition not found.';
+                        }
+                    })
+                    .catch(error => {
+                        // If there is an error, display an error message
+                        console.error('Error fetching word definition:', error);
+                        document.getElementById('wordDisplay').innerText += '\nError fetching word definition.';
+                    });
+            })
+            .catch(error => {
+                console.error('Error fetching random word:', error);
+                document.getElementById('wordDisplay').innerText = 'Error fetching random word.';
+            });
     });
 
- 
+    // When the word of the day button is clicked, get the word of the day
     document.getElementById('wordOfDayButton').addEventListener('click', function() {
-        
-        alert('Word of the day button clicked!');
+        // Make a request to the Wordnik API for the word of the day
+        fetch(`https://api.wordnik.com/v4/words.json/wordOfTheDay?api_key=${apiKey}`)
+            .then(response => response.json())
+            .then(data => {
+                // Get the word of the day, definition, and part of speech
+                const wordOfDay = data.word;
+                const definition = data.definitions[0].text;
+                const partOfSpeech = data.definitions[0].partOfSpeech;
+
+                // Display the word of the day, definition, and part of speech
+                document.getElementById('wordDisplay').innerText = `Word of the Day - ${wordOfDay} `;
+                document.getElementById('wordDisplay').innerText += `\nDefinition: ${definition}`;
+                document.getElementById('wordDisplay').innerText += `\nPart of Speech: ${partOfSpeech}`;
+            })
+            .catch(error => {
+                // If there is an error, display an error message
+                console.error('Error fetching word of the day:', error);
+                document.getElementById('wordDisplay').innerText = 'Error fetching word of the day.';
+            });
     });
 </script>
 </body>

@@ -1,23 +1,23 @@
+// Creating a server using express
 const express = require('express');
 const app = express();
 const mongoose = require('mongoose');
 const path = require('path');
 const port = process.env.PORT || 3000;
 const MongoDbConfig = require('./config/MongoDbConfig');
-const hbs = require('hbs');
+const hbs = require('express-handlebars');
 const apiKey = 'f19t7bxksz6iy0kfbbkerrmczfnv4r3davqplbn33ysrl7ses';
-// const buttonHandler = require('./public/js/buttonHandler');
-// const eventHandler = require('./public/js/eventListener');
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
+// Connect to the MongoDB database
 mongoose
   .connect("mongodb+srv://Users:yahye123@cluster0.1umldd0.mongodb.net/Website")
   .then(() => { console.log("Database Connnected! "); });
 
 const templatePath = path.join(__dirname, './views');
-const publicPath = path.join(__dirname, '../public');
+const publicPath = path.join(__dirname, 'public');
 
 app.set('view engine', 'hbs');
 app.set('views', templatePath);
@@ -34,11 +34,12 @@ app.get('/', (req, res) => {
 
 app.get('/home', (req, res) => {
   const naming = req.query.naming;
-  const isAdmin = req.query.isAdmin === 'true'; // Convert to boolean
+  const isAdmin = req.query.isAdmin === 'true'; 
 
   res.render('home', { naming, isAdmin });
 });
 
+// If the user is an admin, show the admin page
 app.get('/users', async (req, res) => {
   try {
     const allUsers = await MongoDbConfig.find();
@@ -49,6 +50,7 @@ app.get('/users', async (req, res) => {
   }
 });
 
+// Redirect to the login page
 app.post('/login', async (req, res) => {
   const { name, password } = req.body;
   console.log('Received login request:', name, password);
@@ -66,6 +68,7 @@ app.post('/login', async (req, res) => {
       return res.status(401).send("Incorrect username or password");
     }
 
+    // Check if the user is an admin
     const isAdmin = user.isAdmin || false;
 
     // Redirect to the home page with the user's name and isAdmin status
@@ -76,7 +79,7 @@ app.post('/login', async (req, res) => {
   }
 });
 
-
+// Create a new user
 app.post('/signup', async (req, res) => {
   const data = {
     name: req.body.name,
